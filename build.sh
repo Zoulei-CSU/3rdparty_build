@@ -170,7 +170,7 @@ else
     cd curl-7.72.0
     mkdir build/
     cd build/
-    cmake -G"Unix Makefiles" .. -DCMAKE_INSTALL_PREFIX="${Build_PATH}/3rdparty_unix/curl" -DCMAKE_BUILD_TYPE="Release" -DCMAKE_C_FLAGS="${EXT_CFLAGS}" -Dpkgcfg_lib__OPENSSL_ssl="${Build_PATH}/3rdparty_unix/openssl/lib/libssl.so" -Dpkgcfg_lib__OPENSSL_crypto="${Build_PATH}/3rdparty_unix/openssl/lib/libcrypto.so" -DCURL_ZLIB=ON -DBUILD_TESTING=OFF -DZLIB_INCLUDE_DIR="${Build_PATH}/3rdparty_unix/zlib/include" -DZLIB_LIBRARY_RELEASE="${Build_PATH}/3rdparty_unix/zlib/lib/libz.so" -DCMAKE_MODULE_LINKER_FLAGS:STRING="${EXT_MODULE_LINKER_FLAGS}" -DCMAKE_SHARED_LINKER_FLAGS:STRING="${EXT_MODULE_LINKER_FLAGS}" -DCMAKE_EXE_LINKER_FLAGS:STRING="${EXT_EXE_LINKER_FLAGS}"
+    cmake -G"Unix Makefiles" .. -DCMAKE_INSTALL_PREFIX="${Build_PATH}/3rdparty_unix/curl" -DCMAKE_BUILD_TYPE="Release" -DCMAKE_C_FLAGS="${EXT_CFLAGS}" -DOPENSSL_INCLUDE_DIR="${Build_PATH}/3rdparty_unix/openssl/include" -Dpkgcfg_lib__OPENSSL_ssl="${Build_PATH}/3rdparty_unix/openssl/lib/libssl.so" -Dpkgcfg_lib__OPENSSL_crypto="${Build_PATH}/3rdparty_unix/openssl/lib/libcrypto.so" -DOPENSSL_SSL_LIBRARY="${Build_PATH}/3rdparty_unix/openssl/lib/libssl.so" -DOPENSSL_CRYPTO_LIBRARY="${Build_PATH}/3rdparty_unix/openssl/lib/libcrypto.so" -DCURL_ZLIB=ON -DBUILD_TESTING=OFF -DZLIB_INCLUDE_DIR="${Build_PATH}/3rdparty_unix/zlib/include" -DZLIB_LIBRARY_RELEASE="${Build_PATH}/3rdparty_unix/zlib/lib/libz.so" -DCMAKE_MODULE_LINKER_FLAGS:STRING="${EXT_MODULE_LINKER_FLAGS}" -DCMAKE_SHARED_LINKER_FLAGS:STRING="${EXT_MODULE_LINKER_FLAGS}" -DCMAKE_EXE_LINKER_FLAGS:STRING="${EXT_EXE_LINKER_FLAGS}"
     funCheckIsOk $? "Curl cmake失败" "Curl cmake完成."
     make -j${BUILDTHREAD} && make install
     funCheckIsOk $? "Curl 构建失败" "Curl 构建完成."
@@ -325,6 +325,7 @@ else
     make -j${BUILDTHREAD}
     funCheckIsOk $? "QtitanRibbon 构建失败" "QtitanRibbon 构建完成."
     cd ..
+    mkdir -p ${Build_PATH}/3rdparty_unix/qtnribbon
     mv -f include ${Build_PATH}/3rdparty_unix/qtnribbon/include
     mv -f src ${Build_PATH}/3rdparty_unix/qtnribbon/src
     mv -f bin ${Build_PATH}/3rdparty_unix/qtnribbon/lib64
