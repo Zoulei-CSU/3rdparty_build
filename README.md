@@ -52,3 +52,11 @@ Python源码包可以去官网下载，脚本中用的是[Python-3.8.6.tar.xz](h
 
 源码包`zlib-android.tar.gz`其实是从NDK中提取出来的，`openssl-android.tar.gz`源码包是从[android_openssl](https://github.com/KDAB/android_openssl)项目里编译出来的。
 
+
+
+
+
+## 4.其他
+
+[Linux下的Qt编译](./Linux下的Qt编译.md)
+
