@@ -128,12 +128,12 @@ funCheckIsOk $? "CMake 无法执行" "CMake 正常."
 if [ -d ${Build_PATH}/3rdparty_unix/zlib ]; then
     echo -e "\033[32m OK: zlib已经存在，跳过构建 \033[0m"
 else
-    funCheck3rdparty ${Build_PATH}/src/zlib-1.2.5.3.tar.gz
+    funCheck3rdparty ${Build_PATH}/src/zlib-1.2.11.tar.gz
     mkdir -p ${Build_PATH}/build
-    cp -r ${Build_PATH}/src/zlib-1.2.5.3.tar.gz ${Build_PATH}/build/
+    cp -r ${Build_PATH}/src/zlib-1.2.11.tar.gz ${Build_PATH}/build/
     cd ${Build_PATH}/build/
-    tar -zxvf zlib-1.2.5.3.tar.gz
-    cd zlib-1.2.5.3/
+    tar -zxvf zlib-1.2.11.tar.gz
+    cd zlib-1.2.11/
     CFLAGS="-O3 ${EXT_CFLAGS}" LDFLAGS=${EXT_LDFLAGS} ./configure --prefix=${Build_PATH}/3rdparty_unix/zlib
     make -j${BUILDTHREAD} && make install
     funCheckIsOk $? "Zlib 构建失败" "Zlib 构建完成."
@@ -238,6 +238,24 @@ else
     funCheckIsOk $? "GDAL 构建失败" "GDAL 构建完成."
 fi
 
+#编译leveldb
+if [ -d ${Build_PATH}/3rdparty_unix/leveldb ]; then
+    echo -e "\033[32m OK: leveldb已经存在，跳过构建 \033[0m"
+else
+    funCheck3rdparty ${Build_PATH}/src/leveldb-1.22.tar.gz
+    mkdir -p ${Build_PATH}/build
+    cp -r ${Build_PATH}/src/leveldb-1.22.tar.gz ${Build_PATH}/build/
+    cd ${Build_PATH}/build/
+    tar -zxvf leveldb-1.22.tar.gz
+    cd leveldb-1.22
+    mkdir build/
+    cd build/
+    cmake -G"Unix Makefiles" .. -DCMAKE_INSTALL_PREFIX="${Build_PATH}/3rdparty_unix/leveldb" -DCMAKE_BUILD_TYPE="Release" -DLEVELDB_INSTALL=ON -DLEVELDB_BUILD_BENCHMARKS=OFF -DLEVELDB_BUILD_TESTS=OFF  -DCMAKE_C_FLAGS="${EXT_CFLAGS}" -DCMAKE_CXX_FLAGS="${EXT_CXXFLAGS}" -DSNAPPY_BUILD_TESTS=OFF -DCMAKE_MODULE_LINKER_FLAGS:STRING="${EXT_MODULE_LINKER_FLAGS}" -DCMAKE_SHARED_LINKER_FLAGS:STRING="${EXT_MODULE_LINKER_FLAGS}" -DCMAKE_EXE_LINKER_FLAGS:STRING="${EXT_EXE_LINKER_FLAGS}" 
+    funCheckIsOk $? "leveldb cmake失败" "leveldb cmake完成."
+    make -j${BUILDTHREAD} && make install
+    funCheckIsOk $? "leveldb 构建失败" "leveldb 构建完成."
+fi
+
 #编译snappy
 if [ -d ${Build_PATH}/3rdparty_unix/snappy ]; then
     echo -e "\033[32m OK: snappy已经存在，跳过构建 \033[0m"
@@ -285,7 +303,7 @@ else
     cd ${Build_PATH}/build/
     tar -xvJf Python-3.8.6.tar.xz
     cd Python-3.8.6
-    ./configure --enable-optimizations --enable-shared --prefix=${Build_PATH}/3rdparty_unix/python LDFLAGS="${EXT_LDFLAGS} -Wl,-rpath=\$\$ORIGIN:\$\$ORIGIN/lib:.:../lib"
+    ./configure --enable-optimizations --enable-shared --prefix=${Build_PATH}/3rdparty_unix/python LDFLAGS="${EXT_LDFLAGS} -Wl,-rpath=\$\$ORIGIN:\$\$ORIGIN/lib:\$\$ORIGIN/..:.:../lib:.."
     funCheckIsOk $? "Python 编译配置失败" "Python 编译配置完成."
     make -j${BUILDTHREAD} && make install
     funCheckIsOk $? "Python 构建失败" "Python 构建完成."
